@@ -45,14 +45,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "zh_TW",
-    url: "https://food-map-local.vercel.app", // 要換實際部屬網址
+    url: "https://food-map-local.vercel.app",
     title: "Food Map Local - 您的私人美食地圖",
     description:
       "不需帳號，開啟即用。最隱私的餐廳收藏工具，資料 100% 掌握在您手中。",
     siteName: "Food Map Local",
     images: [
       {
-        url: "/1200x630.png", // 要換實際部屬網址
+        url: "https://food-map-local.vercel.app/1200x630.png",
         width: 1200,
         height: 630,
         alt: "Food Map Local Logo",
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Food Map Local - 您的私人美食地圖",
     description: "最隱私的餐廳收藏工具，資料 100% 掌握在您手中。",
-    images: ["/1200x630.png"], // 要換實際部屬網址
+    images: ["https://food-map-local.vercel.app/1200x630.png"],
   },
   robots: {
     index: true,
