@@ -1,0 +1,16 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景：圓角矩形 (Tailwind orange-500: #f97316) -->
+  <rect width="512" height="512" rx="128" fill="#f97316"/>
+  
+  <!-- 文字：F (加強垂直偏差補償：x=52.5%, y=56% 使視覺重心更趨近物理中心) -->
+  <text 
+    x="52.5%" 
+    y="56%" 
+    dominant-baseline="central" 
+    text-anchor="middle" 
+    fill="white" 
+    font-family="system-ui, -apple-system, sans-serif" 
+    font-weight="900" 
+    font-size="320"
+  >F</text>
+</svg>

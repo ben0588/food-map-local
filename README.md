@@ -1,36 +1,241 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🍛 Food Map Local (美食地圖本地版)
 
-## Getting Started
+一個基於 **Local-First** 理念開發的美食地圖應用，所有資料都安全地儲存在您的瀏覽器中，無需伺服器即可使用。
 
-First, run the development server:
+## ✨ 專案特色
+
+- **🗄️ 純本地儲存**: 使用 IndexedDB (Dexie.js) 技術，資料儲存於瀏覽器，完全離線可用
+- **🔍 即時搜尋**: 支援店名與備註內容的即時過濾與搜尋
+- **💾 資料備份**: 提供 JSON 格式匯出與匯入功能，輕鬆備份與遷移資料
+- **🖼️ 智能圖片壓縮**: 自動壓縮上傳圖片（優先使用 WebP 格式，節省 25-35% 空間）
+- **📊 儲存空間監控**: 即時檢測 IndexedDB 使用量，空間不足時自動提醒
+- **🔐 檔案驗證**: Magic Number 驗證確保只接受真正的圖片檔案
+- **🎨 現代化 UI**: 使用 Tailwind CSS 與 SweetAlert2 打造美觀的使用者介面
+- **⚡ 骨架屏載入**: 避免內容閃爍，提供流暢的載入體驗
+- **📱 響應式設計**: 完美支援桌面、平板、手機等各種裝置
+
+## 🏗️ 專案結構
+
+```text
+/food-map-local
+├── app/
+│   ├── page.tsx              # 主頁面：組合元件與狀態管理
+│   ├── layout.tsx            # 全域佈局（Toast 容器）
+│   └── globals.css           # 全域樣式
+├── components/
+│   ├── ui/                   # 基礎 UI 元件
+│   │   ├── Button.tsx        # 按鈕元件（4 種變體）
+│   │   ├── Input.tsx         # 輸入框元件
+│   │   └── Badge.tsx         # 標籤元件
+│   ├── features/             # 業務功能元件
+│   │   ├── Navbar.tsx        # 導覽列（搜尋、匯入匯出）
+│   │   ├── StoreCard.tsx     # 店家卡片（收藏、編輯、刪除）
+│   │   ├── StoreFormModal.tsx # 新增/編輯表單彈窗
+│   │   ├── StoreGrid.tsx     # 店家網格容器
+│   │   └── StoreSkeleton.tsx # 載入中骨架屏
+│   └── shared/               # 共用元件
+│       └── EmptyState.tsx    # 空狀態提示
+├── lib/
+│   ├── db.ts                 # Dexie 資料庫配置
+│   ├── utils.ts              # 工具函式 (cn, tailwind-merge)
+│   ├── image-compression.ts  # 圖片壓縮工具（WebP/JPEG 自動選擇）
+│   ├── image-validation.ts   # 圖片驗證工具（Magic Number）
+│   └── storage-monitor.ts    # 儲存空間監控工具
+├── types/
+│   └── store.ts              # Store 資料型別定義
+└── public/                   # 靜態資源
+```
+
+## 🚀 快速開始
+
+### 安裝相依套件
+
+```bash
+npm install
+```
+
+### 啟動開發伺服器
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+開啟瀏覽器前往 [http://localhost:3000](http://localhost:3000) 即可使用。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 建構生產版本
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+## 📦 技術棧
 
-To learn more about Next.js, take a look at the following resources:
+### 核心框架
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Next.js 16** - React 框架（App Router）
+- **React 19** - UI 函式庫
+- **TypeScript** - 型別安全
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 樣式與 UI
 
-## Deploy on Vercel
+- **Tailwind CSS** - Utility-first CSS 框架
+- **Lucide React** - 現代化圖示庫
+- **SweetAlert2** - 美化的對話框與提示
+- **react-toastify** - Toast 通知訊息
+- **react-medium-image-zoom** - 圖片放大檢視
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 資料儲存
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Dexie.js** - IndexedDB 的優雅封裝
+- **dexie-react-hooks** - React Hooks 整合
+
+### 圖片處理
+
+- **browser-image-compression** - 高品質圖片壓縮（支援 Web Worker）
+
+### 開發工具
+
+- **ESLint** - 程式碼品質檢查
+- **Prettier** - 程式碼格式化
+
+## 🎯 主要功能
+
+### 1. 店家管理
+
+- ✅ 新增店家資訊（店名、地址、營業時間、外送門檻、備註）
+- ✅ 上傳菜單圖片（自動壓縮，優先使用 WebP 格式）
+- ✅ 編輯店家資料
+- ✅ 刪除店家（含確認對話框）
+- ✅ 收藏功能（置頂顯示）
+
+### 2. 搜尋與篩選
+
+- ✅ 即時搜尋店名與備註內容
+- ✅ 收藏店家自動排序在最前面
+
+### 3. 資料備份
+
+- ✅ 匯出資料為 JSON 檔案（含時間戳記）
+- ✅ 匯入 JSON 資料（智能合併，相同店名則更新）
+- ✅ 匯入前提醒使用者備份
+
+### 4. 圖片處理
+
+- ✅ **Magic Number 驗證** - 檢測真實檔案格式，防止偽造副檔名
+- ✅ **智能格式選擇** - 自動偵測瀏覽器支援度，優先使用 WebP（節省 25-35% 空間）
+- ✅ **自動壓縮** - 最大寬高 800px，品質 75%
+- ✅ **Web Worker 壓縮** - 不阻塞 UI，使用者體驗流暢
+- ✅ **檔案大小提醒** - 壓縮後仍超過 2MB 會顯示警告
+- ✅ **圖片放大檢視** - 點擊圖片可放大查看
+
+### 5. 儲存空間管理
+
+- ✅ **即時監控** - 點擊「檢查儲存空間」查看使用量
+- ✅ **智能警告** - 使用超過 80% 顯示提醒，超過 95% 顯示嚴重警告
+- ✅ **使用量顯示** - 清楚顯示已用空間 / 總配額
+
+### 6. 使用者體驗
+
+- ✅ **骨架屏載入** - 避免空白閃爍
+- ✅ **空狀態提示** - 無資料時顯示友善提示
+- ✅ **Toast 通知** - 操作成功/失敗的即時回饋
+- ✅ **美化對話框** - SweetAlert2 提供現代化的確認視窗
+- ✅ **響應式設計** - 支援各種螢幕尺寸
+
+## 💡 使用技巧
+
+### 圖片上傳最佳實踐
+
+1. 建議上傳 **JPG 或 PNG** 格式的菜單照片
+2. 系統會自動壓縮至 800px 寬度，無需手動縮圖
+3. **自動格式優化**：支援 WebP 的瀏覽器會自動使用 WebP（檔案更小）
+4. 支援的格式：JPG, PNG, WebP, GIF
+5. 單張圖片建議不超過 **2MB**（壓縮後）
+
+### 儲存空間管理
+
+1. 定期點擊「檢查儲存空間」了解使用情況
+2. 當使用量超過 80% 時，建議刪除不需要的圖片或店家
+3. IndexedDB 配額因瀏覽器而異（通常 50MB ~ 數 GB）
+4. 使用 WebP 格式可節省 25-35% 的儲存空間
+
+### 資料備份建議
+
+1. 定期點擊「匯出備份」保存資料
+2. 匯入新資料前，先匯出當前資料作為備份
+3. JSON 檔案可用文字編輯器開啟，方便檢視與編輯
+
+### 瀏覽器相容性
+
+- ✅ Chrome / Edge 90+ (支援 WebP)
+- ✅ Firefox 88+ (支援 WebP)
+- ✅ Safari 14+ (支援 WebP)
+- ⚠️ 需支援 IndexedDB、Web Worker 與 Storage API
+
+## 🔧 進階設定
+
+### 修改圖片壓縮參數
+
+編輯 `lib/image-compression.ts`：
+
+```typescript
+const compressedBase64 = await compressImage(file, {
+  maxWidth: 1024, // 調整最大寬度
+  maxHeight: 1024, // 調整最大高度
+  quality: 0.8, // 調整品質 (0.1 ~ 1.0)
+  type: "image/webp", // 強制使用特定格式（留空則自動選擇）
+});
+```
+
+### 圖片格式說明
+
+| 格式     | 檔案大小        | 品質            | 建議                                    |
+| :------- | :-------------- | :-------------- | :-------------------------------------- |
+| **WebP** | ⭐⭐⭐⭐⭐ 極小 | ⭐⭐⭐⭐⭐ 優秀 | ✅ **系統優先使用** (最佳推薦)          |
+| **JPEG** | ⭐⭐⭐ 中等     | ⭐⭐⭐⭐ 良好   | ✅ 降級方案 (相容性好)                  |
+| **PNG**  | ⭐ 較大         | ⭐⭐⭐⭐⭐ 無損 | ⚠️ 僅建議用於透明背景圖                 |
+| **GIF**  | 🔻 極大         | ⭐⭐ 普通       | ⛔ **不建議** (佔用大量 IndexedDB 空間) |
+
+**系統預設**：自動偵測瀏覽器，支援 WebP 就用 WebP，否則降級到 JPEG。
+
+### 自訂主題色
+
+專案預設使用 **橘色 (Orange)** 主題，可在 `tailwind.config.ts` 中修改。
+
+## 📄 授權
+
+此專案僅供個人學習與使用。
+
+## 🙋 常見問題
+
+**Q: 資料會儲存在哪裡？**  
+A: 資料儲存在瀏覽器的 IndexedDB 中，不會上傳到任何伺服器。
+
+**Q: 清除瀏覽器資料會刪除我的店家資訊嗎？**  
+A: 是的，建議定期使用「匯出備份」功能保存資料。
+
+**Q: 可以在不同裝置間同步資料嗎？**  
+A: 可以透過「匯出」和「匯入」功能手動同步。
+
+**Q: 為什麼上傳圖片後檔案變小了？**  
+A: 系統會自動壓縮圖片以節省儲存空間，並優先使用 WebP 格式，壓縮後品質仍保持清晰。
+
+**Q: 支援哪些圖片格式？**  
+A: 支援 JPG、PNG、WebP、GIF。系統會自動選擇最佳輸出格式（優先 WebP）。
+
+**Q: IndexedDB 有容量限制嗎？**  
+A: 有的，不同瀏覽器限制不同：
+
+- **Chrome/Edge**: 可用硬碟空間的 60%（通常數 GB）
+- **Firefox**: 預設 50MB，可手動提升
+- **Safari**: 預設 50MB，會詢問使用者是否增加
+
+使用「檢查儲存空間」功能可查看目前使用量。
+
+**Q: 如何節省儲存空間？**  
+A:
+
+1. 使用 WebP 格式（自動啟用）可節省 25-35% 空間
+2. 刪除不需要的菜單圖片
+3. 定期清理不常用的店家資料
