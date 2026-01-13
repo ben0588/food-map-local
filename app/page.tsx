@@ -14,16 +14,28 @@ import StoreGrid from "@/components/features/StoreGrid";
 import StoreFormModal from "@/components/features/StoreFormModal";
 import EmptyState from "@/components/shared/EmptyState";
 import StoreSkeletonGrid from "@/components/features/StoreSkeleton";
+import Announcement from "@/components/features/Announcement";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 export default function FoodMapLocal() {
   // 搜尋關鍵字狀態
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState<string>("");
   // 表單彈窗開關狀態
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   // 設定選單開關狀態
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   // 正在編輯的店家 (null 表示新增模式)
   const [editingStore, setEditingStore] = useState<Store | null>(null);
+  // 設定公告顯示狀態 (從 localStorage 初始化)
+  const [showAnnouncement, setShowAnnouncement] = useLocalStorage(
+    "food-map-show-notice",
+    true,
+  );
+
+  // 切換公告狀態並儲存
+  const handleToggleAnnouncement = (val: boolean) => {
+    setShowAnnouncement(val);
+  };
 
   /**
    * Live Query: 自動監聽 IndexedDB 資料變化
@@ -73,10 +85,15 @@ export default function FoodMapLocal() {
         onAddNew={() => handleOpenModal()}
         isSettingsOpen={isSettingsOpen}
         setIsSettingsOpen={setIsSettingsOpen}
+        showAnnouncement={showAnnouncement}
+        onToggleAnnouncement={handleToggleAnnouncement}
       />
 
       {/* 主內容區域 */}
       <main className="container mx-auto px-4 py-8">
+        {/* 布告欄 */}
+        {showAnnouncement && <Announcement />}
+
         {/* 根據資料載入狀態顯示不同元件 */}
         {sortedStores === undefined ? (
           // 資料載入中：顯示骨架屏

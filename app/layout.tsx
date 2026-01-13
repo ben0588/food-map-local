@@ -99,7 +99,7 @@ export default function RootLayout({
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
           />
-          <main className="grow">{children}</main>
+          <div className="grow">{children}</div>
           <Footer />
         </div>
         <ToastContainer />
