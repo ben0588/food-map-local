@@ -13,6 +13,8 @@ import {
   Pencil,
   Trash2,
   Image as ImageIcon,
+  ExternalLink,
+  HelpCircle,
 } from "lucide-react";
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
@@ -107,12 +109,28 @@ export default function StoreCard({ store, onEdit }: StoreCardProps) {
         </button>
       </div>
 
-      {/* Content Area */}
       <div className="flex flex-1 flex-col p-4">
-        <div className="mb-1 flex items-start justify-between">
-          <h3 className="line-clamp-1 text-lg font-bold text-neutral-900">
-            {store.name}
-          </h3>
+        {/* 店名與連結區塊 */}
+        <div className={`${store.address ? "" : "mb-2"}`}>
+          <div className="flex max-w-[85%] items-center gap-2">
+            <h3 className="line-clamp-1 text-lg font-bold text-neutral-900">
+              {store.name}
+            </h3>
+
+            {/* 官網連結按鈕 */}
+            {store.websiteUrl && (
+              <a
+                href={store.websiteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="shrink-0 rounded p-1 text-neutral-400 transition-colors hover:bg-orange-50 hover:text-orange-500"
+                title="前往官網 / 線上菜單"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <ExternalLink className="h-4 w-4" />
+              </a>
+            )}
+          </div>
         </div>
 
         {/* 地址與 Google Maps 連結 */}
@@ -130,12 +148,43 @@ export default function StoreCard({ store, onEdit }: StoreCardProps) {
         )}
 
         <div className="mb-3 flex flex-wrap gap-2">
-          <Badge className="gap-1 border-emerald-100 bg-emerald-50 text-emerald-700">
-            <Truck className="h-3 w-3" />${store.deliveryThreshold} 起
-          </Badge>
+          {/* 外送門檻 Badge */}
+          {(() => {
+            // 狀況 A: 未知 (空字串 或 null)
+            if (
+              store.deliveryThreshold == "" ||
+              store.deliveryThreshold == null ||
+              store.deliveryThreshold == undefined
+            ) {
+              return (
+                <Badge className="gap-1 border-neutral-200 bg-neutral-100 text-neutral-500">
+                  <HelpCircle className="h-3 w-3" />
+                  門檻未知
+                </Badge>
+              );
+            }
+            // 狀況 B: 免運 (0)
+            const threshold = Number(store.deliveryThreshold);
+            if (threshold == 0) {
+              return (
+                <Badge className="gap-1 border-green-200 bg-green-100 text-green-700">
+                  <Truck className="h-3 w-3" />
+                  免運費
+                </Badge>
+              );
+            }
+            // 狀況 C: 有門檻 (>0)
+            return (
+              <Badge className="gap-1 border-emerald-100 bg-emerald-50 text-emerald-700">
+                <Truck className="h-3 w-3" />${threshold} 起
+              </Badge>
+            );
+          })()}
+
+          {/* 營業時間 */}
           <Badge className="gap-1 bg-neutral-50 text-neutral-600">
             <Clock className="h-3 w-3" />
-            {store.openingHours}
+            {store.openingHours || "時間未知"}
           </Badge>
         </div>
 

@@ -15,6 +15,7 @@ import {
   NotepadText,
   Store as StoreIcon,
   Image as ImageIcon,
+  Globe,
 } from "lucide-react";
 import { Store } from "@/types/store";
 import { toast } from "react-toastify";
@@ -40,9 +41,10 @@ interface StoreFormModalProps {
 // 表單初始預設值
 const INITIAL_FORM_DATA = {
   name: "",
+  websiteUrl: "",
   address: "",
   openingHours: "",
-  deliveryThreshold: 0,
+  deliveryThreshold: "",
   notes: "",
   menuImage: "",
 };
@@ -60,6 +62,7 @@ export default function StoreFormModal({
     if (editingStore) {
       return {
         name: editingStore.name,
+        websiteUrl: editingStore.websiteUrl || "",
         address: editingStore.address || "",
         openingHours: editingStore.openingHours || "",
         deliveryThreshold: editingStore.deliveryThreshold ?? 0,
@@ -138,6 +141,7 @@ export default function StoreFormModal({
   const handleSubmit = async () => {
     const payload = {
       name: formData.name,
+      websiteUrl: formData.websiteUrl || "",
       address: formData.address || "",
       openingHours: formData.openingHours || "全日",
       deliveryThreshold: Number(formData.deliveryThreshold) || 0,
@@ -212,6 +216,20 @@ export default function StoreFormModal({
             />
           </div>
 
+          {/* 官網或線上菜單連結*/}
+          <div className="space-y-2">
+            <label className="flex items-center gap-1 text-sm font-semibold text-neutral-700">
+              <Globe className="h-3 w-3" /> 官網 / 線上菜單
+            </label>
+            <Input
+              value={formData.websiteUrl || ""}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setFormData({ ...formData, websiteUrl: e.target.value })
+              }
+              placeholder="https://..."
+            />
+          </div>
+
           <div className="space-y-2">
             <label
               className="flex items-center gap-1 text-sm font-semibold text-neutral-700"
@@ -258,14 +276,18 @@ export default function StoreFormModal({
                 id="delivery-threshold"
                 type="number"
                 value={formData.deliveryThreshold || ""}
-                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  const val = e.target.value;
                   setFormData({
                     ...formData,
-                    deliveryThreshold: Number(e.target.value),
-                  })
-                }
-                placeholder="e.g. 300"
+                    deliveryThreshold: val === "" ? "" : Number(val),
+                  });
+                }}
+                placeholder="留空=未知，0=免運"
               />
+              <p className="text-right text-[10px] text-neutral-400">
+                輸入 0 代表免運費，留空代表不確定
+              </p>
             </div>
           </div>
 
