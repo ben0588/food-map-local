@@ -1,39 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import { Megaphone, Edit2, Check, X } from "lucide-react";
 
 export default function Announcement() {
-  const [content, setContent] = useState("");
-  const [isEditing, setIsEditing] = useState(false);
-  const [tempContent, setTempContent] = useState("");
-  const [isMounted, setIsMounted] = useState(false);
-
-  // 初始化：從 LocalStorage 讀取
-  useEffect(() => {
-    // 使用微任務順延更新，避免級聯重繪警告
-    queueMicrotask(() => {
-      setIsMounted(true);
-    });
-
-    const loadContent = () => {
-      const saved = localStorage.getItem("food-map-notice");
-      if (saved) {
-        setContent(saved);
-      } else {
-        // 預設歡迎詞
-        setContent(
-          "歡迎使用訂餐系統！\n請記得在 10:30 前完成點餐。\n外送抵達請通知分機 #1234。",
-        );
-      }
-    };
-
-    loadContent();
-
-    // 監聽儲存事件 (用於匯入功能同步內容)
-    window.addEventListener("storage", loadContent);
-    return () => window.removeEventListener("storage", loadContent);
-  }, []);
+  const [content, setContent] = useState<string>("");
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [tempContent, setTempContent] = useState<string>("");
 
   // 開始編輯
   const handleEdit = () => {
@@ -52,8 +25,6 @@ export default function Announcement() {
   const handleCancel = () => {
     setIsEditing(false);
   };
-
-  if (!isMounted) return null; // 避免 Hydration Mismatch
 
   return (
     <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50/60 p-4 transition-all">
@@ -74,7 +45,7 @@ export default function Announcement() {
             {!isEditing ? (
               <button
                 onClick={handleEdit}
-                className="flex items-center gap-1 rounded-md p-1.5 text-xs text-amber-600 transition-colors hover:bg-amber-100 hover:text-amber-800"
+                className="flex cursor-pointer items-center gap-1 rounded-md p-1.5 text-xs text-amber-600 transition-colors hover:bg-amber-100 hover:text-amber-800"
               >
                 <Edit2 className="h-3 w-3" />
                 <span className="hidden sm:inline">編輯</span>
@@ -83,14 +54,14 @@ export default function Announcement() {
               <div className="flex gap-2">
                 <button
                   onClick={handleCancel}
-                  className="rounded-md p-1 text-neutral-500 hover:bg-neutral-100"
+                  className="cursor-pointer rounded-md p-1 text-neutral-500 hover:bg-neutral-100"
                   title="取消"
                 >
                   <X className="h-4 w-4" />
                 </button>
                 <button
                   onClick={handleSave}
-                  className="rounded-md bg-amber-500 p-1 text-white shadow-sm hover:bg-amber-600"
+                  className="cursor-pointer rounded-md bg-amber-500 p-1 text-white shadow-sm hover:bg-amber-600"
                   title="儲存"
                 >
                   <Check className="h-4 w-4" />
