@@ -2,9 +2,13 @@
 
 import { useState } from "react";
 import { Megaphone, Edit2, Check, X } from "lucide-react";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 export default function Announcement() {
-  const [content, setContent] = useState<string>("");
+  const [content, setContent] = useLocalStorage(
+    "food-map-notice",
+    "歡迎使用訂餐系統！\n請記得在 10:30 前完成點餐。\n外送抵達請通知分機 #1234。",
+  );
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [tempContent, setTempContent] = useState<string>("");
 
@@ -17,7 +21,6 @@ export default function Announcement() {
   // 儲存
   const handleSave = () => {
     setContent(tempContent);
-    localStorage.setItem("food-map-notice", tempContent);
     setIsEditing(false);
   };
 
