@@ -179,8 +179,22 @@ export default function StoreFormModal({
   // 這保證了下次打開時，useState 會重新執行初始化邏輯
   if (!isOpen) return null;
 
+  /**
+   * 處理背景點擊關閉
+   * 當點擊背景（外層 div）時關閉彈窗
+   */
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // 只有當點擊的是背景層（不是內容區）時才關閉
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm duration-200">
+    <div
+      className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm duration-200"
+      onClick={handleBackdropClick}
+    >
       <div className="animate-in zoom-in-95 max-h-[90vh] w-full max-w-lg overflow-hidden overflow-y-auto rounded-xl bg-white shadow-xl duration-200">
         {/* Header */}
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-neutral-100 bg-white px-6 py-4">

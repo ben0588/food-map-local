@@ -16,6 +16,7 @@ import EmptyState from "@/components/shared/EmptyState";
 import StoreSkeletonGrid from "@/components/features/StoreSkeleton";
 import Announcement from "@/components/features/Announcement";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import BackToTop from "@/components/shared/BackToTop";
 
 export default function FoodMapLocal() {
   // 搜尋關鍵字狀態

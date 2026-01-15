@@ -6,6 +6,7 @@ import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { ToastContainer } from "react-toastify";
 import Footer from "@/components/features/Footer";
+import BackToTop from "@/components/shared/BackToTop";
 
 const NotoSansTC = Noto_Sans_TC({
   display: "swap",
@@ -99,7 +100,10 @@ export default function RootLayout({
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
           />
-          <div className="grow">{children}</div>
+          <div className="grow">
+            {children}
+            <BackToTop />
+          </div>
           <Footer />
         </div>
         <ToastContainer />
